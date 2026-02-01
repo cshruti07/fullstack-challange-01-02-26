@@ -1,49 +1,55 @@
-# Full-Stack Personal Expense Tracker 💰
+# 💰 Full-Stack Personal Expense Tracker
 
-A responsive, full-stack application built as a technical challenge. The app features a clean "Pinterest-style" aesthetic and provides a seamless way to track, filter, and manage daily expenses.
+A modern, containerized full-stack application designed to help users manage personal finances with a high-performance, aesthetic interface.
 
 ## 🚀 Live Links
-- **Live Application:** [PASTE_YOUR_VERCEL_LINK_HERE]
-- **API Endpoint:** [PASTE_YOUR_RENDER_LINK_HERE]/api/expenses
-
-> **Note:** The backend is hosted on a Free Tier instance. If the app is inactive, it may take 30–60 seconds to "wake up" on the first load.
+- **Frontend (Vercel):** [https://fullstack-challange-01-02-26-gvgy.vercel.app/](https://fullstack-challange-01-02-26-gvgy.vercel.app/)
+- **Backend (Render):** [https://fullstack-challange-01-02-26-3.onrender.com/api/expenses](https://fullstack-challange-01-02-26-3.onrender.com/api/expenses)
 
 ---
 
-## 📝 Project Summary
-This project demonstrates a complete development lifecycle, from creating a Spring Boot REST API to a containerized deployment. 
+## 📋 Project Overview
+This assignment solves the problem of manual expense tracking by providing a centralized, responsive dashboard. The goal was to build a scalable architecture that separates concerns between a high-availability API and a performant client-side UI.
 
-### **Key Features**
-- **Real-time Totals:** Automatically sums up all expenses in the dashboard.
-- **Smart Filtering:** Server-side category filtering (Food, Travel, Work, etc.).
-- **Modern UI:** Built with Tailwind CSS v4 for a responsive, card-based layout.
-- **Containerization:** Fully Dockerized backend for consistent environment staging.
-
----
-
-## 🛠️ Technical Stack
-
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | React 18 (Vite), Tailwind CSS v4, Axios |
-| **Backend** | Java 21, Spring Boot 3, Spring Data JPA |
-| **Database** | H2 In-Memory Database |
-| **Deployment** | Vercel (Frontend), Render (Backend) |
-| **DevOps** | Docker, GitHub Actions |
+### **The Problem it Solves:**
+Managing daily expenses often feels like a chore. This app provides:
+- **Instant Financial Overview:** Automatically calculates total spending.
+- **Contextual Categorization:** Organizes spending into logical groups (Food, Work, Travel).
+- **Cross-Platform Accessibility:** Accessible via any device thanks to cloud deployment.
 
 ---
 
-## 🏗️ Architecture & Deployment
+## 🛠️ Tech Stack & "The Why"
 
-The project follows a decoupled architecture:
-1.  **Backend (Render):** A Dockerized Spring Boot application that handles RESTful requests and persists data in an H2 database.
-2.  **Frontend (Vercel):** A React SPA that communicates with the Render API.
-3.  **CORS:** Configured to allow secure communication between the two distinct domains.
+### **Backend: Spring Boot 3 & Java 21**
+- **Why Java 21?** Utilized the latest LTS version for improved performance and modern syntax (Virtual Threads ready).
+- **Why Spring Data JPA?** To leverage the Repository pattern, which abstracts the data access layer and makes the code cleaner and more maintainable.
+- **Why H2 Database?** Chosen for this challenge to ensure the application is "Plug & Play" for reviewers without requiring complex external DB credentials.
+
+### **Frontend: React 18 & Vite**
+- **Why Vite?** Provides a significantly faster development experience and optimized production builds compared to traditional Create React App (CRA).
+- **Why Tailwind CSS v4?** Specifically chosen for its "zero-runtime" CSS-in-JS capabilities and modern design tokens, allowing for the "Pinterest-style" aesthetic without bloated CSS files.
+- **Why Axios?** For robust HTTP request handling, automatic JSON transformation, and better error interceptors.
+
+### **DevOps: Docker & Multi-Platform Cloud**
+- **Why Docker?** To eliminate the "it works on my machine" problem. The backend is fully containerized to ensure consistent behavior across local and cloud environments.
+- **Why Vercel + Render?** This hybrid cloud approach demonstrates the ability to manage Cross-Origin Resource Sharing (CORS) and connect distributed systems.
 
 ---
 
-## ⚙️ Local Development
+## 🏗️ Architecture Summary
+The application follows a **Decoupled Client-Server Architecture**:
 
-### **Backend**
+
+
+1.  **RESTful API:** Developed with a Controller-Service-Repository pattern.
+2.  **CORS Policy:** Custom-configured to allow secure communication between the Vercel frontend domain and the Render backend.
+3.  **State Management:** React hooks (`useState`, `useEffect`) manage the local UI state and sync with the backend via asynchronous API calls.
+
+---
+
+## 🚀 Local Installation
+
+### **1. Clone the Repo**
 ```bash
-./mvnw spring-boot:run
+git clone [https://github.com/cshruti07/fullstack-challange-01-02-26](https://github.com/cshruti07/fullstack-challange-01-02-26)
