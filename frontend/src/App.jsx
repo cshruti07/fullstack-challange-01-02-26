@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = "https://fullstack-challange-backend.onrender.com/api/expenses";
+// Replace the old localhost URL with your Render link
+const API_URL = "https://fullstack-challange-01-02-26-3.onrender.com/api/expenses";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
