@@ -5,70 +5,128 @@ const API_URL = "http://localhost:8080/api/expenses";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
-  const [formData, setFormData] = useState({ description: '', amount: '', category: 'Food', date: '' });
   const [filter, setFilter] = useState('');
+  const [form, setForm] = useState({
+    description: '',
+    amount: '',
+    category: 'Food',
+    date: new Date().toISOString().split('T')[0] // Default to today: YYYY-MM-DD
+  });
 
-  // 1. Fetch Expenses (Requirement: List Expenses)
-  const fetchExpenses = async () => {
-    const url = filter ? `${API_URL}?category=${filter}` : API_URL;
-    const res = await axios.get(url);
-    setExpenses(res.data);
+  // Load Data from Backend
+  const loadExpenses = async () => {
+    try {
+      const url = filter ? `${API_URL}?category=${filter}` : API_URL;
+      const response = await axios.get(url);
+      setExpenses(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  useEffect(() => { fetchExpenses(); }, [filter]);
+  useEffect(() => {
+    loadExpenses();
+  }, [filter]);
 
-  // 2. Add Expense (Requirement: Create Expense)
+  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(API_URL, formData);
-    setFormData({ description: '', amount: '', category: 'Food', date: '' });
-    fetchExpenses();
+    try {
+      // Send the form as-is (date is already YYYY-MM-DD)
+      await axios.post(API_URL, form);
+      
+      // Reset form fields
+      setForm({ ...form, description: '', amount: '' });
+      
+      // Refresh the table immediately
+      loadExpenses();
+    } catch (error) {
+      console.error("Error adding expense:", error);
+      alert("Failed to add expense. Status: " + error.response?.status);
+    }
   };
 
-  // 3. Calculate Total (Requirement: Totals)
-  const total = expenses.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+  const total = expenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 font-sans">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Money Tracker</h1>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-10 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white shadow-xl rounded-2xl p-6 mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Money Tracker</h1>
+          <p className="text-gray-500 mb-6">Manage your daily expenses efficiently</p>
+          
+          <div className="bg-blue-600 rounded-xl p-6 text-white mb-8">
+            <span className="uppercase text-xs font-semibold opacity-70">Total Balance Used</span>
+            <h2 className="text-4xl font-bold">${total.toFixed(2)}</h2>
+          </div>
 
-        {/* --- FORM --- */}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <input className="border p-2 rounded" type="text" placeholder="Description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} required />
-          <input className="border p-2 rounded" type="number" placeholder="Amount" value={formData.amount} onChange={(e) => setFormData({...formData, amount: e.target.value})} required />
-          <select className="border p-2 rounded" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}>
-            <option>Food</option><option>Travel</option><option>Bills</option><option>Other</option>
-          </select>
-          <input className="border p-2 rounded" type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
-          <button className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition" type="submit">Add Expense</button>
-        </form>
-
-        {/* --- SUMMARY & FILTER --- */}
-        <div className="flex justify-between items-center mb-4 border-t pt-4">
-          <div className="text-xl font-semibold">Total: ${total.toFixed(2)}</div>
-          <select className="border p-2 rounded" onChange={(e) => setFilter(e.target.value)}>
-            <option value="">All Categories</option><option>Food</option><option>Travel</option><option>Bills</option>
-          </select>
+          {/* ADD EXPENSE FORM */}
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <input 
+              className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+              type="text" placeholder="Description" 
+              value={form.description} onChange={e => setForm({...form, description: e.target.value})} required 
+            />
+            <input 
+              className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+              type="number" step="0.01" placeholder="Amount" 
+              value={form.amount} onChange={e => setForm({...form, amount: e.target.value})} required 
+            />
+            <select 
+              className="p-3 border rounded-lg bg-white"
+              value={form.category} onChange={e => setForm({...form, category: e.target.value})}
+            >
+              <option>Food</option><option>Travel</option><option>Bills</option><option>Shopping</option>
+            </select>
+            <input 
+              className="p-3 border rounded-lg"
+              type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} required 
+            />
+            <button className="bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-lg" type="submit">
+              Add Expense
+            </button>
+          </form>
         </div>
 
-        {/* --- LIST --- */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        {/* FILTER & LIST */}
+        <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
+          <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+            <h3 className="font-bold text-gray-700">Recent Transactions</h3>
+            <select 
+              className="p-2 border rounded-md text-sm bg-white"
+              value={filter} onChange={e => setFilter(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              <option>Food</option><option>Travel</option><option>Bills</option><option>Shopping</option>
+            </select>
+          </div>
+
+          <table className="w-full text-left">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="p-3 border-b">Date</th><th className="p-3 border-b">Description</th><th className="p-3 border-b">Category</th><th className="p-3 border-b text-right">Amount</th>
+              <tr className="text-gray-400 text-sm uppercase">
+                <th className="p-4">Date</th>
+                <th className="p-4">Description</th>
+                <th className="p-4">Category</th>
+                <th className="p-4 text-right">Amount</th>
               </tr>
             </thead>
-            <tbody>
-              {expenses.map((exp) => (
-                <tr key={exp.id} className="hover:bg-gray-50">
-                  <td className="p-3 border-b">{new Date(exp.date).toLocaleDateString()}</td>
-                  <td className="p-3 border-b">{exp.description}</td>
-                  <td className="p-3 border-b"><span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">{exp.category}</span></td>
-                  <td className="p-3 border-b text-right font-medium">${exp.amount}</td>
+            <tbody className="divide-y divide-gray-100">
+              {expenses.length > 0 ? expenses.map((item) => (
+                <tr key={item.id} className="hover:bg-blue-50 transition">
+                  <td className="p-4 text-sm text-gray-600">{item.date}</td>
+                  <td className="p-4 font-semibold text-gray-800">{item.description}</td>
+                  <td className="p-4">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-bold">
+                      {item.category}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right font-bold text-gray-900">${item.amount}</td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="4" className="p-10 text-center text-gray-400">No expenses found.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

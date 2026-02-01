@@ -8,6 +8,7 @@ import com.fullstack.moneyTracker.entity.Expense;
 import com.fullstack.moneyTracker.repository.ExpenseRepository;
 
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/expenses")

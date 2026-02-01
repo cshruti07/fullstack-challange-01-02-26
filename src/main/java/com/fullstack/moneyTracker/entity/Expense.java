@@ -2,16 +2,12 @@ package com.fullstack.moneyTracker.entity;
 
 import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDate; // Changed from LocalDateTime to LocalDate
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@Data // Generates Getters/Setters via Lombok
+@Data
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +15,12 @@ public class Expense {
 
     private String description;
     
-    // Using BigDecimal for money handling as required
     private BigDecimal amount;
     
     private String category;
 
-    private LocalDateTime date;
+    // LocalDate matches the "YYYY-MM-DD" string from React perfectly
+    private LocalDate date;
 
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

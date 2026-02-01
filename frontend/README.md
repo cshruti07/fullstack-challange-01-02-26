@@ -1,16 +1,28 @@
-# React + Vite
+# 💰 Personal Expense Tracker (Full-Stack)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A robust full-stack application for managing personal finances, built during a technical assessment. This project features a React frontend and a Spring Boot backend, allowing users to track, filter, and total their expenses in real-time.
 
-Currently, two official plugins are available:
+## 🚀 Features
+- **Create Expenses:** Add description, amount, category, and date via a responsive form.
+- **Dynamic List:** View all expenses in a clean, categorized table.
+- **Real-Time Totals:** Automatically calculates the sum of all expenses.
+- **Server-Side Filtering:** Filter transactions by category using optimized JPA query methods.
+- **Data Persistence:** Uses an H2 In-Memory database for seamless local development.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
+- **Backend:** Java 21, Spring Boot, Spring Data JPA, Lombok, H2 Database.
+- **Frontend:** React 18, Vite, Tailwind CSS v4, Axios.
+- **Tools:** PostCSS, Lucide-Icons (if used), Maven.
 
-## React Compiler
+## 🏁 Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Prerequisites
+- **Java:** Version 17 or higher (Java 21 recommended).
+- **Node.js:** Version 20 or higher (v24.13.0 used in development).
+- **Maven:** (Included via `./mvnw`).
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 2. Backend Setup
+1. Open the project root in your terminal.
+2. Run the Spring Boot application:
+   ```bash
+   ./mvnw spring-boot:run
