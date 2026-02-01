@@ -9,7 +9,7 @@ import com.fullstack.moneyTracker.repository.ExpenseRepository;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
